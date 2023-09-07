@@ -69,16 +69,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             } else if (record->event.pressed) {
                 register_code(KC_CAPS);
-                /* layer_on(2); */
             } else {
                 unregister_code(KC_CAPS);
-                /* layer_off(2); */
             }
             return false;
             break;
         default:
             return true;
     }
+}
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    switch(get_highest_layer(state)) {
+    case GAMING:
+        keymap_config.nkro = 1;
+        break;
+    default:
+        keymap_config.nkro = 0;
+        break;
+    }
+    return state;
 }
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
